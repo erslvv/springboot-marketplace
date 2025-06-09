@@ -1,5 +1,6 @@
 package com.aliyev.yerassyl.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +14,11 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+
     private User user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<OrderItem> items = new ArrayList<>();
 
     public Long getId() { return id; }

@@ -1,5 +1,6 @@
 package com.aliyev.yerassyl.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,6 +13,7 @@ public class OrderItem {
     @ManyToOne
     @MapsId("orderId")
     @JoinColumn(name = "order_id")
+    @JsonBackReference
     private Order order;
 
     @ManyToOne
