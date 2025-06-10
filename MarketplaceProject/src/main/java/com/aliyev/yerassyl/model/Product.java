@@ -1,6 +1,8 @@
 package com.aliyev.yerassyl.model;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -11,7 +13,6 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long product_id;
 
-
     @Column(name = "name")
     private String name;
 
@@ -21,17 +22,20 @@ public class Product {
     @Column(name = "price")
     private int price;
 
-    public Product() {
+    @OneToMany(
+            mappedBy = "product",
+            cascade = CascadeType.REMOVE,
+            orphanRemoval = true
+    )
+    private List<OrderItem> orderItems = new ArrayList<>();
 
-    }
-
+    public Product() { }
 
     public Product(String name, String description, int price) {
         this.name = name;
         this.description = description;
         this.price = price;
     }
-
 
     public long getId() {
         return product_id;
@@ -65,8 +69,17 @@ public class Product {
         this.price = price;
     }
 
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
+
     @Override
     public String toString() {
-        return "Product [id=" + product_id + ", name=" + name + ", desc=" + description  + "price=" + price + "]";
+        return "Product [id=" + product_id + ", name=" + name +
+                ", desc=" + description + ", price=" + price + "]";
     }
 }

@@ -5,7 +5,9 @@ import com.aliyev.yerassyl.model.*;
 import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Component
 public class OrderMapper {
@@ -33,7 +35,29 @@ public class OrderMapper {
             items.add(item);
         }
 
+
+
         order.setItems(items);
         return order;
     }
+    public List<OrderItem> toOrderItems(List<OrderDTO.ItemDTO> itemDTOs, Order order, List<Product> products) {
+        Map<Long, Product> productMap = products.stream()
+                .collect(Collectors.toMap(Product::getId, p -> p));
+
+        return itemDTOs.stream().map(dto -> {
+            OrderItem item = new OrderItem();
+            item.setOrder(order);
+            item.setProduct(productMap.get(dto.productId));
+            item.setQuantity(dto.quantity);
+
+            OrderItemKey key = new OrderItemKey();
+            key.setOrderId(order.getId());
+            key.setProductId(dto.productId);
+            item.setId(key);
+
+            return item;
+        }).collect(Collectors.toCollection(ArrayList::new)); // ✅ возвращает изменяемый список
+    }
+
+
 }

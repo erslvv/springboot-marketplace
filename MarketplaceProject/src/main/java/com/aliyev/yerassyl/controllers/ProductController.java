@@ -2,22 +2,19 @@ package com.aliyev.yerassyl.controllers;
 
 
 import com.aliyev.yerassyl.dto.ProductDTO;
-import com.aliyev.yerassyl.dto.UserDTO;
 import com.aliyev.yerassyl.model.Product;
-import com.aliyev.yerassyl.model.User;
 import com.aliyev.yerassyl.repository.ProductRepository;
 import com.aliyev.yerassyl.service.ProductService;
 import com.aliyev.yerassyl.serviceImpl.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.ArrayList;
+
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:8081") //разрешаю принимать запросы от указанного адреса
 @RestController
@@ -61,6 +58,16 @@ public class ProductController {
         return productService.updateProduct(id, dto)
                 .map(updated -> new ResponseEntity<>(updated, HttpStatus.OK))
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/products/{id}")
+    public ResponseEntity<Void> deleteProductById(@PathVariable("id") Long id) {
+        try {
+            productService.deleteProductById(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @DeleteMapping("/products")

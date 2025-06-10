@@ -1,6 +1,8 @@
 package com.aliyev.yerassyl.model;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -11,7 +13,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-
     @Column(name = "name")
     private String name;
 
@@ -21,9 +22,14 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    public User() {
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.REMOVE,
+            orphanRemoval = true
+    )
+    private List<Order> orders = new ArrayList<>();
 
-    }
+    public User() { }
 
     public User(String password, String name, String email) {
         this.password = password;
@@ -31,12 +37,9 @@ public class User {
         this.email = email;
     }
 
-
-
     public long getId() {
         return id;
     }
-
 
     public void setId(long id) {
         this.id = id;
@@ -66,10 +69,16 @@ public class User {
         this.password = password;
     }
 
+    public List<Order> getOrders() {
+        return orders;
+    }
 
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
 
     @Override
     public String toString() {
-        return "User[id=" + id + ", name=" + name + ", email=" + email  + "]";
+        return "User[id=" + id + ", name=" + name + ", email=" + email + "]";
     }
 }

@@ -58,18 +58,68 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Order updateOrder(Long id, OrderDTO dto) {
-        Order existingOrder = orderRepository.findById(id).orElseThrow();
+        Order existingOrder = orderRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Order not found with id `" + id + "`"
+                ));
 
-        User user = userRepository.findById(dto.getUserId()).orElseThrow();
-        List<Product> products = productRepository.findAllById(
-                dto.getItems().stream().map(i -> i.productId).toList()
-        );
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "User not found with id `" + dto.getUserId() + "`"
+                ));
 
-        Order updatedOrder = orderMapper.toEntity(dto, user, products);
-        updatedOrder.setId(id); // Сохраняем старый ID
-        return orderRepository.save(updatedOrder);
+        // Проверяем наличие продуктов
+        List<Long> wanted = dto.getItems().stream()
+                .map(i -> i.productId)
+                .toList();
+        List<Product> products = productRepository.findAllById(wanted);
+        if (products.size() != wanted.size()) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "One or more products not found: " + wanted
+            );
+        }
+
+        // Обновляем связь пользователя
+        existingOrder.setUser(user);
+
+        // Очищаем старые элементы (orphanRemoval удалит их из БД)
+        existingOrder.getItems().clear();
+
+        // Добавляем новые элементы
+        for (OrderDTO.ItemDTO itemDTO : dto.getItems()) {
+            OrderItem item = new OrderItem();
+            item.setOrder(existingOrder);
+
+            Product product = products.stream()
+                    .filter(p -> Objects.equals(p.getId(), itemDTO.productId))
+                    .findFirst()
+                    .orElseThrow();
+            item.setProduct(product);
+            item.setQuantity(itemDTO.quantity);
+
+            OrderItemKey key = new OrderItemKey();
+            key.setOrderId(existingOrder.getId());
+            key.setProductId(product.getId());
+            item.setId(key);
+
+            existingOrder.getItems().add(item);
+        }
+
+        return orderRepository.save(existingOrder);
     }
+
+
+
+
+
+
+
+
 
     @Override
     public void deleteOrder(Long id) {
