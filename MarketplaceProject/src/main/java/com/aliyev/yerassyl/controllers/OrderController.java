@@ -1,44 +1,77 @@
 package com.aliyev.yerassyl.controllers;
 
-import com.aliyev.yerassyl.dto.OrderDTO;
-import com.aliyev.yerassyl.model.Order;
-import com.aliyev.yerassyl.service.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.aliyev.yerassyl.facade.OrderFacade;
+import com.aliyev.yerassyl.model.dto.OrderDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/orders")
+@Tag(name = "Order API", description = "Ручки для работы с заказами")
 public class OrderController {
-    @Autowired private OrderService orderService;
 
-    @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody OrderDTO dto) {
-        Order saved = orderService.createOrder(dto);
-        return new ResponseEntity<>(saved, HttpStatus.CREATED);
+    OrderFacade orderFacade;
+
+    public OrderController(OrderFacade orderFacade) {
+        this.orderFacade = orderFacade;
     }
 
+    @Operation(summary = "Создать ордер", description = "Создает ордер")
+    @PostMapping
+    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO dto) {
+        OrderDTO result = orderFacade.createOrder(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
+    }
+
+    @Operation(summary = "Получить ордер по ID", description = "Возвращает ордер по ID")
     @GetMapping("/{id}")
-    public ResponseEntity<Order> getOrder(@PathVariable Long id) {
-        return orderService.getOrderById(id)
+    public ResponseEntity<OrderDTO> getOrder(@PathVariable Long id) {
+        return orderFacade.getOrder(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
+
+    @Operation(summary = "Получить ордер юзера по ID", description = "Возвращает ордер юзера по ID")
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Order>> getUserOrders(@PathVariable Long userId) {
-        return ResponseEntity.ok(orderService.getOrdersByUserId(userId));
+    public ResponseEntity<List<OrderDTO>> getUserOrders(@PathVariable Long userId) {
+        log.debug("Request to get user orders from Controller: {}", userId);
+        return ResponseEntity.ok(orderFacade.getUserOrders(userId));
     }
 
+    @Operation(summary = "Обновить ордер по ID", description = "Обновляет ордер по ID")
     @PutMapping("/{id}")
-    public ResponseEntity<Order> updateOrder(@PathVariable Long id, @RequestBody OrderDTO dto) {
-        return new ResponseEntity<>(orderService.updateOrder(id, dto), HttpStatus.OK);
+    public ResponseEntity<OrderDTO> updateOrder(@PathVariable Long id,
+                                                @RequestBody OrderDTO dto) {
+        OrderDTO result = orderFacade.updateOrder(id, dto);
+        return ResponseEntity.ok(result);
     }
 
+    @Operation(summary = "Удалить ордер по ID", description = "Удаляет ордер по ID")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
-        orderService.deleteOrder(id);
+        log.debug("Request to delete order from Controller with Order ID: {}", id);
+        orderFacade.deleteOrder(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Получить все ордеры", description = "Возвращает все ордеры")
+    @GetMapping
+    public ResponseEntity<List<OrderDTO>> getAll() {
+        List<OrderDTO> orders = orderFacade.getAllOrders();
+        return ResponseEntity.ok(orders);
+    }
+
+    @Operation(summary = "Удалить все ордеры", description = "Удаляет все ордеры")
+    @DeleteMapping("/all")
+    public ResponseEntity<Void> deleteAll() {
+        orderFacade.deleteAllOrders();
         return ResponseEntity.noContent().build();
     }
 }

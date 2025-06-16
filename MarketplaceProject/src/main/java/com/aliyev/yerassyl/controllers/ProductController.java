@@ -1,14 +1,15 @@
 package com.aliyev.yerassyl.controllers;
 
 
-import com.aliyev.yerassyl.dto.ProductDTO;
-import com.aliyev.yerassyl.model.Product;
-import com.aliyev.yerassyl.repository.ProductRepository;
-import com.aliyev.yerassyl.service.ProductService;
-import com.aliyev.yerassyl.serviceImpl.ProductServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.aliyev.yerassyl.facade.ProductFacade;
+import com.aliyev.yerassyl.model.dto.ProductDTO;
+import com.aliyev.yerassyl.model.entity.Product;
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,77 +17,74 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:8081") //разрешаю принимать запросы от указанного адреса
+@Slf4j
+@CrossOrigin(origins = "http://localhost:8081")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/products")
 public class ProductController {
-    @Autowired
-    ProductRepository productRepository;
-    @Autowired
-    private ProductServiceImpl productServiceImpl;
 
-    @Autowired
-    private ProductService productService;
+    ProductFacade productFacade;
 
-    @GetMapping("/products")
+    public ProductController(ProductFacade productFacade) {
+        this.productFacade = productFacade;
+    }
+
+    @Operation(summary = "Получить все продукты", description = "Возвращает все продукты")
+    @GetMapping
     public ResponseEntity<List<ProductDTO>> getAllProducts() {
-        return ResponseEntity.ok(productService.getAllProducts());
+        log.debug("Request to get all products");
+        return ResponseEntity.ok(productFacade.getAllProducts());
     }
 
 
-    @GetMapping("/products/{id}")
+    @Operation(summary = "Получить продукт по ID", description = "Возвращает продукт по ID")
+    @GetMapping("/{id}")
     public ResponseEntity<ProductDTO> getProduct(@PathVariable Long id) {
-        return productService.getProduct(id)
+        log.debug("Request to get product with id {}", id);
+        return productFacade.getProduct(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/products")
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
-
-        try{
-            return new ResponseEntity<>(productServiceImpl.createProduct(product), HttpStatus.CREATED);
-
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @PostMapping
+    @Operation(summary = "Создать продукт", description = "Создает продукт")
+    public ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody ProductDTO productDTO, BindingResult br) {
+        log.debug("Request to create product");
+        return new ResponseEntity<>(productFacade.createProduct(productDTO, br), HttpStatus.CREATED);
     }
 
-    @PutMapping("/products/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable("id") Long id,
-                                                 @RequestBody ProductDTO dto) {
-        return productService.updateProduct(id, dto)
-                .map(updated -> new ResponseEntity<>(updated, HttpStatus.OK))
+    @Operation(summary = "Создать продукты", description = "Создает несколько продуктов ")
+    @PostMapping("/batch")
+    public ResponseEntity<List<ProductDTO>> createProducts(@RequestBody List<ProductDTO> productDTOs) {
+        log.debug("Request to create products");
+        List<ProductDTO> created = productFacade.createProducts(productDTOs);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    }
+
+    @Operation(summary = "Обновить продукт по ID", description = "Обновляет продукт по ID")
+    @PutMapping("/{id}")
+    public ResponseEntity<Product> updateProduct(@PathVariable("id") Long id, @RequestBody ProductDTO dto) {
+        log.debug("Request to update product with id {}", id);
+        return productFacade.updateProduct(id, dto)
+                .map(product -> new ResponseEntity<>(product, HttpStatus.OK))
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/products/{id}")
+    @Operation(summary = "Удалить продукт по ID", description = "Удаляет продукт по ID")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProductById(@PathVariable("id") Long id) {
-        try {
-            productService.deleteProductById(id);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        log.debug("Request to delete product with id {}", id);
+        productFacade.deleteProductById(id);
+        return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/products")
+    @Operation(summary = "Удалить все продукты", description = "Удаляет все продукты")
+    @DeleteMapping("/all")
     public ResponseEntity<String> deleteAllProduct() {
-        try{
-            productRepository.deleteAll();
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        log.debug("Request to delete all products");
+        productFacade.deleteAllProduct();
+        return ResponseEntity.ok("All products deleted");
     }
-
-
-
-
-
-
-
-
 
 
 }

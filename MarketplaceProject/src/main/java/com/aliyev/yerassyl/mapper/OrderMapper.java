@@ -1,63 +1,51 @@
 package com.aliyev.yerassyl.mapper;
 
-import com.aliyev.yerassyl.dto.OrderDTO;
-import com.aliyev.yerassyl.model.*;
+import com.aliyev.yerassyl.model.dto.OrderDTO;
+import com.aliyev.yerassyl.model.entity.*;
 import org.springframework.stereotype.Component;
-import java.util.ArrayList;
+
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
 public class OrderMapper {
+
     public Order toEntity(OrderDTO dto, User user, List<Product> products) {
         Order order = new Order();
         order.setUser(user);
 
-        List<OrderItem> items = new ArrayList<>();
-        for (OrderDTO.ItemDTO itemDTO : dto.getItems()) {
-            Product product = products.stream()
-                    .filter(p -> Objects.equals(p.getId(), itemDTO.productId))
-                    .findFirst()
-                    .orElseThrow(() -> new RuntimeException("Product not found: " + itemDTO.productId));
+        List<OrderItem> items = dto.getItems().stream()
+                .map(i -> {
+                    Product product = products.stream()
+                            .filter(p -> Objects.equals(p.getId(), i.getProductId()))
+                            .findFirst()
+                            .orElseThrow();
 
-            OrderItem item = new OrderItem();
-            item.setOrder(order);
-            item.setProduct(product);
-            item.setQuantity(itemDTO.quantity);
-
-            OrderItemKey key = new OrderItemKey();
-            key.setOrderId(null);
-            key.setProductId(product.getId());
-
-            item.setId(key);
-            items.add(item);
-        }
-
-
+                    OrderItem item = new OrderItem();
+                    item.setOrder(order);
+                    item.setProduct(product);
+                    item.setQuantity(i.getQuantity());
+                    return item;
+                })
+                .collect(Collectors.toList());
 
         order.setItems(items);
         return order;
     }
-    public List<OrderItem> toOrderItems(List<OrderDTO.ItemDTO> itemDTOs, Order order, List<Product> products) {
-        Map<Long, Product> productMap = products.stream()
-                .collect(Collectors.toMap(Product::getId, p -> p));
 
-        return itemDTOs.stream().map(dto -> {
-            OrderItem item = new OrderItem();
-            item.setOrder(order);
-            item.setProduct(productMap.get(dto.productId));
-            item.setQuantity(dto.quantity);
-
-            OrderItemKey key = new OrderItemKey();
-            key.setOrderId(order.getId());
-            key.setProductId(dto.productId);
-            item.setId(key);
-
-            return item;
-        }).collect(Collectors.toCollection(ArrayList::new)); // ✅ возвращает изменяемый список
+    public OrderDTO toDTO(Order order) {
+        OrderDTO dto = new OrderDTO();
+        dto.setId(order.getId());
+        dto.setUserId(order.getUser().getId());
+        dto.setItems(order.getItems().stream()
+                .map(item -> {
+                    OrderDTO.ItemDTO i = new OrderDTO.ItemDTO();
+                    i.setProductId(item.getProduct().getId());
+                    i.setQuantity(item.getQuantity());
+                    return i;
+                })
+                .collect(Collectors.toList()));
+        return dto;
     }
-
-
 }
