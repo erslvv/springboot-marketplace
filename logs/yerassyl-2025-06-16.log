@@ -1,0 +1,53 @@
+2025-06-16 12:25:03 INFO  c.a.y.MarketplaceProjectApplication - Starting MarketplaceProjectApplication using Java 21.0.1 with PID 10114 (/Users/erslvv/Desktop/normMarketPlace/MarketplaceProject/target/classes started by erslvv in /Users/erslvv/Desktop/normMarketPlace)
+2025-06-16 12:25:03 DEBUG c.a.y.MarketplaceProjectApplication - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-06-16 12:25:03 INFO  c.a.y.MarketplaceProjectApplication - No active profile set, falling back to 1 default profile: "default"
+2025-06-16 12:25:06 INFO  c.a.y.MarketplaceProjectApplication - Started MarketplaceProjectApplication in 2.6 seconds (process running for 3.081)
+2025-06-16 12:57:09 INFO  c.a.y.MarketplaceProjectApplication - Starting MarketplaceProjectApplication using Java 21.0.1 with PID 10587 (/Users/erslvv/Desktop/normMarketPlace/MarketplaceProject/target/classes started by erslvv in /Users/erslvv/Desktop/normMarketPlace)
+2025-06-16 12:57:09 DEBUG c.a.y.MarketplaceProjectApplication - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-06-16 12:57:09 INFO  c.a.y.MarketplaceProjectApplication - No active profile set, falling back to 1 default profile: "default"
+2025-06-16 12:57:17 INFO  c.a.y.MarketplaceProjectApplication - Starting MarketplaceProjectApplication using Java 21.0.1 with PID 10595 (/Users/erslvv/Desktop/normMarketPlace/MarketplaceProject/target/classes started by erslvv in /Users/erslvv/Desktop/normMarketPlace)
+2025-06-16 12:57:17 DEBUG c.a.y.MarketplaceProjectApplication - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-06-16 12:57:17 INFO  c.a.y.MarketplaceProjectApplication - No active profile set, falling back to 1 default profile: "default"
+2025-06-16 12:59:38 INFO  c.a.y.MarketplaceProjectApplication - Starting MarketplaceProjectApplication using Java 21.0.1 with PID 10648 (/Users/erslvv/Desktop/normMarketPlace/MarketplaceProject/target/classes started by erslvv in /Users/erslvv/Desktop/normMarketPlace)
+2025-06-16 12:59:38 DEBUG c.a.y.MarketplaceProjectApplication - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-06-16 12:59:38 INFO  c.a.y.MarketplaceProjectApplication - No active profile set, falling back to 1 default profile: "default"
+2025-06-16 12:59:41 INFO  c.a.y.MarketplaceProjectApplication - Started MarketplaceProjectApplication in 2.586 seconds (process running for 2.96)
+2025-06-16 12:59:55 DEBUG c.a.y.controllers.ProductController - Request to get all products
+2025-06-16 12:59:55 DEBUG c.a.y.s.impl.ProductServiceImpl - Get all products
+2025-06-16 12:59:55 DEBUG c.a.y.facade.impl.ProductFacadeImpl - Get all products on Facade Layer
+2025-06-16 13:00:51 DEBUG c.a.y.service.impl.OrderServiceImpl - Create order by Id 10
+2025-06-16 13:00:51 DEBUG c.a.y.facade.impl.OrderFacadeImpl - Create order on Facade layer, id=10
+2025-06-16 13:01:10 DEBUG c.a.y.service.impl.OrderServiceImpl - Get order by Id 1
+2025-06-16 13:01:10 DEBUG c.a.y.facade.impl.OrderFacadeImpl - Get order on Facade layer with ID: 1
+2025-06-16 13:01:21 DEBUG c.a.y.controllers.OrderController - Request to get user orders from Controller: 100
+2025-06-16 13:01:21 DEBUG c.a.y.service.impl.OrderServiceImpl - Get all orders
+2025-06-16 13:03:34 INFO  c.a.y.MarketplaceProjectApplication - Starting MarketplaceProjectApplication using Java 21.0.1 with PID 10869 (/Users/erslvv/Desktop/normMarketPlace/MarketplaceProject/target/classes started by erslvv in /Users/erslvv/Desktop/normMarketPlace)
+2025-06-16 13:03:34 DEBUG c.a.y.MarketplaceProjectApplication - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-06-16 13:03:34 INFO  c.a.y.MarketplaceProjectApplication - No active profile set, falling back to 1 default profile: "default"
+2025-06-16 13:03:36 INFO  c.a.y.MarketplaceProjectApplication - Started MarketplaceProjectApplication in 2.446 seconds (process running for 2.877)
+2025-06-16 13:25:55 INFO  c.a.y.MarketplaceProjectApplication - Starting MarketplaceProjectApplication using Java 21.0.1 with PID 11130 (/Users/erslvv/Desktop/normMarketPlace/MarketplaceProject/target/classes started by erslvv in /Users/erslvv/Desktop/normMarketPlace)
+2025-06-16 13:25:55 DEBUG c.a.y.MarketplaceProjectApplication - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-06-16 13:25:55 INFO  c.a.y.MarketplaceProjectApplication - No active profile set, falling back to 1 default profile: "default"
+2025-06-16 13:25:57 INFO  c.a.y.MarketplaceProjectApplication - Started MarketplaceProjectApplication in 2.39 seconds (process running for 2.862)
+2025-06-16 13:26:21 INFO  c.a.y.MarketplaceProjectApplication - Starting MarketplaceProjectApplication using Java 21.0.1 with PID 11152 (/Users/erslvv/Desktop/normMarketPlace/MarketplaceProject/target/classes started by erslvv in /Users/erslvv/Desktop/normMarketPlace)
+2025-06-16 13:26:21 DEBUG c.a.y.MarketplaceProjectApplication - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-06-16 13:26:21 INFO  c.a.y.MarketplaceProjectApplication - No active profile set, falling back to 1 default profile: "default"
+2025-06-16 13:26:23 INFO  c.a.y.MarketplaceProjectApplication - Started MarketplaceProjectApplication in 2.315 seconds (process running for 2.704)
+2025-06-16 13:38:23 INFO  c.a.y.MarketplaceProjectApplication - Starting MarketplaceProjectApplication using Java 21.0.1 with PID 11657 (/Users/erslvv/Desktop/normMarketPlace/MarketplaceProject/target/classes started by erslvv in /Users/erslvv/Desktop/normMarketPlace)
+2025-06-16 13:38:23 DEBUG c.a.y.MarketplaceProjectApplication - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-06-16 13:38:23 INFO  c.a.y.MarketplaceProjectApplication - No active profile set, falling back to 1 default profile: "default"
+2025-06-16 13:38:25 INFO  c.a.y.MarketplaceProjectApplication - Started MarketplaceProjectApplication in 2.47 seconds (process running for 2.976)
+2025-06-16 13:39:08 INFO  c.a.y.MarketplaceProjectApplication - Starting MarketplaceProjectApplication using Java 21.0.1 with PID 11724 (/Users/erslvv/Desktop/normMarketPlace/MarketplaceProject/target/classes started by erslvv in /Users/erslvv/Desktop/normMarketPlace)
+2025-06-16 13:39:08 DEBUG c.a.y.MarketplaceProjectApplication - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-06-16 13:39:08 INFO  c.a.y.MarketplaceProjectApplication - No active profile set, falling back to 1 default profile: "default"
+2025-06-16 13:39:10 INFO  c.a.y.MarketplaceProjectApplication - Started MarketplaceProjectApplication in 2.474 seconds (process running for 2.952)
+2025-06-16 13:39:20 INFO  c.a.y.MarketplaceProjectApplication - Starting MarketplaceProjectApplication using Java 21.0.1 with PID 11739 (/Users/erslvv/Desktop/normMarketPlace/MarketplaceProject/target/classes started by erslvv in /Users/erslvv/Desktop/normMarketPlace)
+2025-06-16 13:39:20 DEBUG c.a.y.MarketplaceProjectApplication - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-06-16 13:39:20 INFO  c.a.y.MarketplaceProjectApplication - No active profile set, falling back to 1 default profile: "default"
+2025-06-16 13:39:22 INFO  c.a.y.MarketplaceProjectApplication - Started MarketplaceProjectApplication in 2.28 seconds (process running for 2.654)
+2025-06-16 13:40:22 DEBUG c.a.y.controllers.UserController - Request to get all users
+2025-06-16 13:40:22 DEBUG c.a.y.facade.impl.UserFacadeImpl - Get all users on Facade layer
+2025-06-16 13:40:22 DEBUG c.a.y.service.impl.UserServiceImpl - Get all users
+2025-06-16 13:40:53 DEBUG c.a.y.controllers.UserController - Request to get all users
+2025-06-16 13:40:53 DEBUG c.a.y.facade.impl.UserFacadeImpl - Get all users on Facade layer
+2025-06-16 13:40:53 DEBUG c.a.y.service.impl.UserServiceImpl - Get all users
