@@ -1,5 +1,6 @@
 package com.aliyev.yerassyl.model.entity;
 
+import com.aliyev.yerassyl.enumeration.Role;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

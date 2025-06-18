@@ -12,7 +12,7 @@ import lombok.experimental.FieldDefaults;
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long orderItemKey;
+    Long id;
 
     @ManyToOne
     @JoinColumn(name = "order_id")
