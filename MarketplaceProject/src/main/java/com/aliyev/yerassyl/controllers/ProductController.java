@@ -52,7 +52,7 @@ public class ProductController {
 
     @PostMapping
     @Operation(summary = "Создать продукт", description = "Создает продукт")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody ProductDTO productDTO, BindingResult br) {
         log.debug("Request to create product");
         return new ResponseEntity<>(productFacade.createProduct(productDTO, br), HttpStatus.CREATED);
@@ -60,7 +60,7 @@ public class ProductController {
 
     @Operation(summary = "Создать продукты", description = "Создает несколько продуктов ")
     @PostMapping("/batch")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<ProductDTO>> createProducts(@RequestBody List<ProductDTO> productDTOs) {
         log.debug("Request to create products");
         List<ProductDTO> created = productFacade.createProducts(productDTOs);
@@ -69,7 +69,7 @@ public class ProductController {
 
     @Operation(summary = "Обновить продукт по ID", description = "Обновляет продукт по ID")
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Product> updateProduct(@PathVariable("id") Long id, @RequestBody ProductDTO dto) {
         log.debug("Request to update product with id {}", id);
         return productFacade.updateProduct(id, dto)
@@ -79,7 +79,7 @@ public class ProductController {
 
     @Operation(summary = "Удалить продукт по ID", description = "Удаляет продукт по ID")
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteProductById(@PathVariable("id") Long id) {
         log.debug("Request to delete product with id {}", id);
         productFacade.deleteProductById(id);
@@ -88,7 +88,7 @@ public class ProductController {
 
     @Operation(summary = "Удалить все продукты", description = "Удаляет все продукты")
     @DeleteMapping("/all")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteAllProduct() {
         log.debug("Request to delete all products");
         productFacade.deleteAllProduct();

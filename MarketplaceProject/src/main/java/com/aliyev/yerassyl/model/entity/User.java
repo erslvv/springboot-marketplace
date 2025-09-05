@@ -43,7 +43,7 @@ public class User implements UserDetails {
     List<Order> orders = new ArrayList<>();
 
     @Override public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
     @Override public String getUsername() { return email; }
     @Override public boolean isAccountNonExpired()  { return true; }
