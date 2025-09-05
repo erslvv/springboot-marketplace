@@ -1,33 +1,25 @@
-# Maven
+# --- Build / Maven ---
 target/
 *.jar
-*.war
-*.ear
-
-# Logs
 *.log
 
-# IntelliJ IDEA
+# --- IntelliJ IDEA ---
 .idea/
 *.iml
-*.iws
-*.ipr
 out/
 
-# macOS
+# --- macOS / Windows ---
 .DS_Store
-
-# Eclipse
-.project
-.classpath
-.csettings/
-.settings/
-
-# VS Code
-.vscode/
-
-# Environment files
-.env
-
-# OS metadata
 Thumbs.db
+
+# --- Environment ---
+.env
+.env.*
+!.env.example
+
+# --- Maven Wrapper ---
+.mvn/wrapper/maven-wrapper.jar
+
+# --- Docker ---
+/docker-data/
+/docker-volumes/
