@@ -3,9 +3,9 @@ server:
 
 spring:
     datasource:
-        url: jdbc:postgresql://localhost:5432/market
-        username: market
-        password: market
+        url: jdbc:postgresql://postgres:5432/${POSTGRES_DB:market}
+        username: ${POSTGRES_USER:market}
+        password: ${POSTGRES_PASSWORD:market}
         driver-class-name: org.postgresql.Driver
 
     flyway:
