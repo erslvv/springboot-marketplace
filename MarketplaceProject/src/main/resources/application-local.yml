@@ -1,23 +1,30 @@
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/marketplace
-    username: mp_user
-    password: mp_pass
-    driver-class-name: org.postgresql.Driver
-
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        format_sql: true
-        jdbc:
-          lob:
-            non_contextual_creation: true
-
-  sql:
-    init:
-      mode: never
-
 server:
-  port: 8080
+    port: 8080
+
+spring:
+    datasource:
+        url: jdbc:postgresql://localhost:5432/marketplace
+        username: mp_user
+        password: mp_pass
+        driver-class-name: org.postgresql.Driver
+
+    flyway:
+        schemas: public
+        validate-migration-naming: true
+        # если БД уже заполнена и нет schema_history, можно временно включить:
+        # baseline-on-migrate: true
+        # baseline-version: 1.0.1
+
+    jpa:
+        hibernate:
+            ddl-auto: none   # для работы через миграции; на dev можно 'update', но лучше none
+        properties:
+            hibernate:
+                default_schema: public
+                format_sql: true
+                jdbc.lob.non_contextual_creation: true
+        open-in-view: false
+
+    sql:
+        init:
+            mode: never
