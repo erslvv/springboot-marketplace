@@ -1,22 +1,17 @@
--- 1. добаляем колонку (пока NULLable)
-ALTER TABLE users ADD COLUMN role VARCHAR(20);
-
--- 2. заполняем существующих пользователей значением USER
+ALTER TABLE users ADD COLUMN IF NOT EXISTS role VARCHAR(20);
 UPDATE users SET role = 'USER' WHERE role IS NULL;
-
--- 3. делаем NOT NULL + ограничиваем список значений
 ALTER TABLE users ALTER COLUMN role SET NOT NULL;
-ALTER TABLE users
-    ADD CONSTRAINT chk_user_role
-        CHECK (role IN ('USER','ADMIN'));
-UPDATE users SET role = 'ADMIN'
-WHERE email = '12345678@gmail.com';
 
-UPDATE users
-SET    role = 'USER'
-WHERE  role IS NULL
-  AND  email <> 'era@gmail.com';
+DO $$
+    BEGIN
+        IF NOT EXISTS (
+            SELECT 1 FROM pg_constraint
+            WHERE conname = 'chk_user_role'
+        ) THEN
+            ALTER TABLE users
+                ADD CONSTRAINT chk_user_role CHECK (role IN ('USER','ADMIN'));
+        END IF;
+    END$$;
 
-Select * from users where role = 'ADMIN';
-
-Select * from users where role = 'USER';
+-- пример инициализации админа (по желанию)
+-- UPDATE users SET role = 'ADMIN' WHERE email = '12345678@gmail.com';

@@ -1,48 +1,44 @@
+-- создаём/выбираем схему
+CREATE SCHEMA IF NOT EXISTS public;
+SET search_path TO public;
 
-CREATE TABLE users (
-                       id SERIAL PRIMARY KEY,
-                       name VARCHAR(255) NOT NULL,
-                       email VARCHAR(255) NOT NULL UNIQUE,
-                       password VARCHAR(255) NOT NULL
-);
+-- USERS
+CREATE TABLE IF NOT EXISTS users (
+                                     id        BIGSERIAL PRIMARY KEY,
+                                     name      VARCHAR(255)        NOT NULL,
+    email     VARCHAR(255)        NOT NULL UNIQUE,
+    password  VARCHAR(255)        NOT NULL,
+    role      VARCHAR(20)         NOT NULL DEFAULT 'USER',
+    CONSTRAINT chk_user_role CHECK (role IN ('USER','ADMIN'))
+    );
 
-CREATE TABLE products (
-                          id SERIAL PRIMARY KEY,
-                          name VARCHAR(255) NOT NULL,
-                          description VARCHAR(255),
-                          price INTEGER NOT NULL
-);
+-- PRODUCTS
+CREATE TABLE IF NOT EXISTS products (
+                                        id          BIGSERIAL PRIMARY KEY,
+                                        name        VARCHAR(255)  NOT NULL,
+    description TEXT,
+    price       INTEGER       NOT NULL CHECK (price >= 0)
+    );
 
-CREATE TABLE orders (
-                        id SERIAL PRIMARY KEY,
-                        user_id INTEGER NOT NULL,
-                        CONSTRAINT fk_orders_user FOREIGN KEY (user_id)
-                            REFERENCES users(id) ON DELETE CASCADE
-);
+-- ORDERS
+CREATE TABLE IF NOT EXISTS orders (
+                                      id         BIGSERIAL PRIMARY KEY,
+                                      user_id    BIGINT       NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    status     VARCHAR(20)  NOT NULL DEFAULT 'CREATED',
+    created_at TIMESTAMP    NOT NULL DEFAULT NOW()
+    );
 
-CREATE TABLE order_items (
-                             id SERIAL PRIMARY KEY,
-                             order_id INTEGER NOT NULL,
-                             product_id INTEGER NOT NULL,
-                             quantity INTEGER NOT NULL DEFAULT 1,
-                             CONSTRAINT fk_order_items_order FOREIGN KEY (order_id)
-                                 REFERENCES orders(id) ON DELETE CASCADE,
-                             CONSTRAINT fk_order_items_product FOREIGN KEY (product_id)
-                                 REFERENCES products(id) ON DELETE RESTRICT,
-                             CONSTRAINT unq_order_product UNIQUE (order_id, product_id)
-);
+-- ORDER ITEMS
+CREATE TABLE IF NOT EXISTS order_items (
+                                           id         BIGSERIAL PRIMARY KEY,
+                                           order_id   BIGINT NOT NULL REFERENCES orders(id)   ON DELETE CASCADE,
+    product_id BIGINT NOT NULL REFERENCES products(id) ON DELETE RESTRICT,
+    quantity   INTEGER NOT NULL CHECK (quantity > 0),
+    -- цена на момент покупки (если надо)
+    price_at_purchase INTEGER
+    );
 
--- Примеры запросов:
-SELECT *
-FROM users
-WHERE id = 254;
-
-SELECT *
-FROM products
-WHERE id IN (6, 7);
-
-SELECT *
-FROM orders;
-
-SELECT *
-FROM order_items;
+-- Индексы
+CREATE INDEX IF NOT EXISTS idx_orders_user_id      ON orders(user_id);
+CREATE INDEX IF NOT EXISTS idx_order_items_order   ON order_items(order_id);
+CREATE INDEX IF NOT EXISTS idx_order_items_product ON order_items(product_id);
