@@ -1,0 +1,22 @@
+{
+    "info": {
+        "name": "Marketplace API",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Get Products",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "{{baseUrl}}/products",
+                    "host": ["{{baseUrl}}"],
+                    "path": ["products"]
+                }
+            }
+        }
+    ],
+    "variable": [
+        { "key": "baseUrl", "value": "http://localhost:8080" }
+    ]
+}
