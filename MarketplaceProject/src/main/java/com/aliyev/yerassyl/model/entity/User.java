@@ -42,8 +42,11 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
     List<Order> orders = new ArrayList<>();
 
-    @Override public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        String r = role.name();
+        String auth = r.startsWith("ROLE_") ? r : "ROLE_" + r;
+        return List.of(new SimpleGrantedAuthority(auth));
     }
     @Override public String getUsername() { return email; }
     @Override public boolean isAccountNonExpired()  { return true; }
