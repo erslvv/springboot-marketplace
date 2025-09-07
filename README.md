@@ -25,11 +25,8 @@ DTO ↔ MapStruct ↔ Entity
 
 ### Локально
 ```bash
-# 1. Поднять базу
-docker compose up -d db
-
-# 2. Запустить приложение
-./mvnw spring-boot:run -Dspring-boot.run.profiles=local
+### Локальный запуск
+docker compose up --build
 ```
 
 ## После запуска
